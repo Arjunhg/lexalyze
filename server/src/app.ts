@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGODB_URI!)
 .catch((error) => console.log(error));
 
 const clientUrl = process.env.NODE_ENV === 'production' 
-  ? 'https://lexalyze-rust.vercel.app/'
+  ? 'https://lexalyze-rust.vercel.app'
   : 'http://localhost:3000';
 
 app.use(cors({
