@@ -9,9 +9,13 @@ passport.use(
         clientID: process.env.GOOGLE_CLIENT_ID!,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         // callbackURL: 'https://lexxalyze.onrender.com/auth/google/callback'
-        callbackURL: process.env.BACKEND_URL + '/auth/google/callback',
+        // callbackURL: process.env.BACKEND_URL + '/auth/google/callback',
         // callbackURL: '/auth/google/callback'
         // callbackURL: `${process.env.BACKEND_URL}/auth/google/callback`
+        callbackURL: process.env.NODE_ENV === 'production'
+            ? 'https://lexalyze-8950.onrender.com/auth/google/callback'
+            : '/auth/google/callback',
+        proxy: true
     }, 
     async (accessToken, refreshToken, profile, done) => {
         try {

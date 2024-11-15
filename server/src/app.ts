@@ -23,10 +23,12 @@ mongoose.connect(process.env.MONGODB_URI!)
 .then(() => console.log('Connected to MongoDB'))
 .catch((error) => console.log(error));
 
-const clientUrl = process.env.CLIENT_URL || 'https://lexxalyze.vercel.app';
+const clientUrl = process.env.NODE_ENV === 'production' 
+  ? 'https://lexxalyze.vercel.app'
+  : 'http://localhost:3000';
 
 app.use(cors({
-    origin: [clientUrl],
+    origin: clientUrl,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With']

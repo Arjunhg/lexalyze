@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const baseURL = process.env.NEXT_PUBLIC_NODE_ENV === 'production'
+  ? 'https://lexalyze-8950.onrender.com'
+  : 'http://localhost:4000';
+
 export const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL,
     withCredentials: true
 })
 

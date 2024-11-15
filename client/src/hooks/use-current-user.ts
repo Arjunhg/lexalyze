@@ -7,16 +7,20 @@ export const useCurrentUser = () => {
         queryKey: ["currentUser"],
         queryFn: async () => {
             try {
-                const response = await api.get('/auth/current-user');
+                const response = await api.get('/auth/current-user', {
+                    withCredentials: true
+                });
                 return response.data;
             } catch (error) {
                 if (axios.isAxiosError(error) && error.response?.status === 401) {
-                    // Handle unauthorized error
                     return null;
                 }
+                console.error('Error fetching user:', error);
                 throw error;
             }
         },
+        retry: false,
+        refetchOnWindowFocus: false
     });
     return {isLoading, isError, user};
 }
