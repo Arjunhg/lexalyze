@@ -10,6 +10,7 @@ import passport from 'passport';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import "./config/passport";
+import http from 'http';
 
 // routes 
 import authRoute from './routes/auth';
@@ -18,6 +19,7 @@ import paymentRoute from './routes/payment';
 import { handleWebhook } from './controllers/payment.controller';
 
 const app = express();
+const server = http.createServer(app);
 
 mongoose.connect(process.env.MONGODB_URI!)
 .then(() => console.log('Connected to MongoDB'))
@@ -77,6 +79,8 @@ app.use("/contracts", contractsRoute);
 // after stripe integration
 app.use("/payment", paymentRoute);
 
+server.keepAliveTimeout = 120*1000;
+server.headersTimeout = 120*1000;
 
 const PORT = Number(process.env.PORT) || 4000;
 app.listen(PORT, "0.0.0.0",() => {
