@@ -31,6 +31,7 @@ const clientUrl = process.env.NODE_ENV === 'production'
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
+            console.error(`CORS blocked: ${origin}`);
             callback(new Error('Not allowed by CORS'));
         }
     },
@@ -82,11 +83,13 @@ app.use(session({
         touchAfter: 24*3600
     }),
     cookie:{
+        // secure: process.env.NODE_ENV === 'production',
         secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        sameSite: 'none',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, //24 hours,
-        domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined 
+        domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined
+
     }
 }))
 
