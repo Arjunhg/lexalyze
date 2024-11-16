@@ -25,6 +25,10 @@ router.get("/current-user", (req, res) => {
 
   // console.log('Session:', req.session);
   // console.log('User:', req.user);
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  console.log('Cookies:', req.cookies);
+
   console.log('Is Authenticated:', req.isAuthenticated());
     
 
