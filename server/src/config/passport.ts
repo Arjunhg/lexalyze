@@ -14,7 +14,7 @@ passport.use(
         // callbackURL: `${process.env.BACKEND_URL}/auth/google/callback`
         callbackURL: process.env.NODE_ENV === 'production'
             ? 'https://lexalyze-8950.onrender.com/auth/google/callback'
-            : '/auth/google/callback',
+            : 'http://localhost:4000/auth/google/callback',
         proxy: true
     }, 
     async (accessToken, refreshToken, profile, done) => {

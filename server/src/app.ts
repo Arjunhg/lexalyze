@@ -20,25 +20,29 @@ import { handleWebhook } from './controllers/payment.controller';
 
 const app = express();
 
-const clientUrl = process.env.NODE_ENV === 'production' 
-  ? 'https://lexalyze-rust.vercel.app'
-  : 'http://localhost:3000';
+// const clientUrl = process.env.NODE_ENV === 'production' 
+//   ? 'https://lexalyze-rust.vercel.app'
+//   : 'http://localhost:3000';
+
+const allowedOrigins = [
+    'https://lexalyze-rust.vercel.app',
+    'http://localhost:3000',
+    'https://lexalyze-8950.onrender.com'
+];
 
 
-  app.use(cors({
+app.use(cors({
     origin: (origin, callback) => {
-        const allowedOrigins = [clientUrl, 'http://localhost:3000'];
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
-            console.error(`CORS blocked: ${origin}`);
+            console.log('Blocked by CORS:', origin);
             callback(new Error('Not allowed by CORS'));
         }
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
-    exposedHeaders: ['set-cookie']
 }));
 
 
@@ -88,7 +92,7 @@ app.use(session({
         sameSite: 'none',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, //24 hours,
-        domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined
+        // domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined
 
     }
 }))

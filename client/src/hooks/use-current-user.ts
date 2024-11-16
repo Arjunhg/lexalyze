@@ -1,4 +1,4 @@
-// import { api } from "@/lib/api";
+import { api } from "@/lib/api";
 // import { useQuery } from "@tanstack/react-query"
 // import axios from "axios";
 
@@ -46,15 +46,11 @@ export function useCurrentUser() {
       try {
         setIsLoading(true);
         // Add withCredentials to ensure cookies are sent
-        const response = await axios.get<{ user: User }>('/auth/current-user', {
-          withCredentials: true,
-          headers: {
-            'Accept': 'application/json',
-          }
-        });
+        const response = await api.get('/auth/current-user');
         
         console.log('Auth response:', response.data); // Debug log
-        setUser(response.data.user);
+        setUser(response.data);
+        setError(null);
       } catch (err) {
         console.error('Auth error:', err); // Debug log
         setError(err as Error);

@@ -23,14 +23,11 @@ router.get("/google/callback",
 
 router.get("/current-user", (req, res) => {
 
-  // console.log('Session:', req.session);
-  // console.log('User:', req.user);
+  console.log('Session ID:', req.sessionID);
   console.log('Session:', req.session);
   console.log('User:', req.user);
+  console.log('Headers:', req.headers);
   console.log('Cookies:', req.cookies);
-
-  console.log('Is Authenticated:', req.isAuthenticated());
-    
 
   if (req.isAuthenticated() && req.user) {
     res.json(req.user);
@@ -40,6 +37,7 @@ router.get("/current-user", (req, res) => {
     res.status(401).json({ error: "Unauthorized" });
   }
 });
+
 
 router.get("/logout", (req, res, next) => {
   req.logout((err) => {

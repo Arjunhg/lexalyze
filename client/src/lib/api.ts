@@ -6,7 +6,11 @@ const baseURL = process.env.NEXT_PUBLIC_NODE_ENV === 'production'
 
 export const api = axios.create({
     baseURL,
-    withCredentials: true
+    withCredentials: true,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+  }
 })
 
 export const logout = async () => {
