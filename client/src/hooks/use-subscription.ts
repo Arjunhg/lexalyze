@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 export function useSubscription() {
   const {
     isLoading: isUserLoading,
-    isError: isUserError,
+    error: isUserError,
   } = useCurrentUser();
   const [loading, setLoading] = useState<boolean>(true);
 
