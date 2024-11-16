@@ -12,15 +12,36 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { useModalStore } from "@/store/zustand";
+import { useEffect } from "react";
 
 export function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const { user, isLoading } = useCurrentUser();
+  const { user, isLoading, error } = useCurrentUser();
+
+  useEffect(() => {
+    // Debug logs
+    console.log('Protected Layout State:', {
+      user,
+      isLoading,
+      error,
+      cookies: document.cookie // Check if cookies exist
+    });
+  }, [user, isLoading, error]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="flex items-center justify-center">
           <Loader2 className="size-4 mr-2 animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-red-500">
+          Error loading user: {error.message}
         </div>
       </div>
     );
