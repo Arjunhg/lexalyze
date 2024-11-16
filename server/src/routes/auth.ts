@@ -32,7 +32,7 @@ router.get("/current-user", (req, res) => {
   console.log('Is Authenticated:', req.isAuthenticated());
     
 
-  if (req.isAuthenticated()) {
+  if (req.isAuthenticated() && req.user) {
     res.json(req.user);
     console.log('Requested User is:', req.user);
   } else {
