@@ -25,14 +25,10 @@ const clientUrl = process.env.NODE_ENV === 'production'
   : 'http://localhost:3000';
 
 
-app.use(cors({
+  app.use(cors({
     origin: (origin, callback) => {
-        if (origin === undefined) {
-            callback(new Error('Origin is undefined'));
-            return;
-        }
         const allowedOrigins = [clientUrl, 'http://localhost:3000'];
-        if (allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('Not allowed by CORS'));
@@ -43,6 +39,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
     exposedHeaders: ['set-cookie']
 }));
+
 
 const server = http.createServer(app);
 
