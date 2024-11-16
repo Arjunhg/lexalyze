@@ -26,7 +26,6 @@ import { api } from "@/lib/api";
 // }
 
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 interface User {
   id: string;
