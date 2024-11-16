@@ -26,7 +26,18 @@ const clientUrl = process.env.NODE_ENV === 'production'
 
 
 app.use(cors({
-    origin: clientUrl,
+    origin: (origin, callback) => {
+        if (origin === undefined) {
+            callback(new Error('Origin is undefined'));
+            return;
+        }
+        const allowedOrigins = [clientUrl, 'http://localhost:3000'];
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
@@ -48,6 +59,14 @@ app.use(morgan('dev'));
 app.get('/', (req, res) => {
     res.json({status: 'API is running'})
 })
+app.get('/env', (req, res) => {
+    res.json({
+        SESSION_SECRET: process.env.SESSION_SECRET,
+        GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+        GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    });
+});
+
 
 app.post(
     "/payment/webhook",

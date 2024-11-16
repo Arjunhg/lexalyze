@@ -14,7 +14,7 @@ router.get("/google/callback",
       // Don't redirect here, handle it in the callback
   }),
   (req, res) => {
-      console.log('Auth callback - session:', req.session);
+      // console.log('Auth callback - session:', req.session);
       console.log('Auth callback - user:', req.user);
       // Redirect after successful authentication
       res.redirect(`${process.env.CLIENT_URL}/dashboard`);
@@ -23,8 +23,8 @@ router.get("/google/callback",
 
 router.get("/current-user", (req, res) => {
 
-  console.log('Session:', req.session);
-  console.log('User:', req.user);
+  // console.log('Session:', req.session);
+  // console.log('User:', req.user);
   console.log('Is Authenticated:', req.isAuthenticated());
     
 
