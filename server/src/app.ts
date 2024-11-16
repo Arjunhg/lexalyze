@@ -19,22 +19,27 @@ import paymentRoute from './routes/payment';
 import { handleWebhook } from './controllers/payment.controller';
 
 const app = express();
+
+const clientUrl = process.env.NODE_ENV === 'production' 
+  ? 'https://lexalyze-rust.vercel.app'
+  : 'http://localhost:3000';
+
+
+app.use(cors({
+    origin: clientUrl,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+    exposedHeaders: ['set-cookie']
+}));
+
 const server = http.createServer(app);
 
 mongoose.connect(process.env.MONGODB_URI!)
 .then(() => console.log('Connected to MongoDB'))
 .catch((error) => console.log(error));
 
-const clientUrl = process.env.NODE_ENV === 'production' 
-  ? 'https://lexalyze-rust.vercel.app'
-  : 'http://localhost:3000';
 
-app.use(cors({
-    origin: clientUrl,
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With']
-}));
 app.use(helmet({
     contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false
 }));
@@ -57,13 +62,15 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI!
+        mongoUrl: process.env.MONGODB_URI!,
+        touchAfter: 24*3600
     }),
     cookie:{
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, //24 hours
+        maxAge: 24 * 60 * 60 * 1000, //24 hours,
+        domain: process.env.NODE_ENV === 'production' ? '.onrender.com' : undefined 
     }
 }))
 

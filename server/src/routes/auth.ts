@@ -3,25 +3,31 @@ import passport from "passport";
 
 const router = express.Router();
 
-const handleAuth = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  passport.authenticate('google', {
-      failureRedirect: `${process.env.CLIENT_URL}/login`,
-      successRedirect: `${process.env.CLIENT_URL}/dashboard`,
-      session: true,
-  })(req, res, next);
-};
-
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-router.get(
-  "/google/callback", handleAuth
-  
+router.get("/google/callback", 
+  passport.authenticate("google", { 
+      failureRedirect: `${process.env.CLIENT_URL}/login`,
+      // Don't redirect here, handle it in the callback
+  }),
+  (req, res) => {
+      console.log('Auth callback - session:', req.session);
+      console.log('Auth callback - user:', req.user);
+      // Redirect after successful authentication
+      res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+  }
 );
 
 router.get("/current-user", (req, res) => {
+
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  console.log('Is Authenticated:', req.isAuthenticated());
+    
+
   if (req.isAuthenticated()) {
     res.json(req.user);
     console.log('Requested User is:', req.user);

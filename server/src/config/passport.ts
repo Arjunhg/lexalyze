@@ -20,6 +20,7 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
         try {
 
+            console.log('Google Profile:', profile); // Debug log
             let user = await User.findOne({googleId: profile.id});
 
             if(!user){
@@ -31,7 +32,7 @@ passport.use(
                 });
             }
 
-            
+            console.log('User authenticated:', user); // Debug log
             done(null, user);
         } catch (error) {
             console.error("Error during Google OAuth:", error);
